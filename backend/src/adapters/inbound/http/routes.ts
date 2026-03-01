@@ -1,5 +1,6 @@
 import express from "express";
 import { getAllRoutes, setBaseline, getBaseline } from "../../outbound/routesAdapter";
+import { Route } from "../../../core/domain/route";
 import { computeCB, TARGET_INTENSITY } from "../../../core/application/computeCB";
 
 const router = express.Router();
@@ -20,8 +21,8 @@ router.get("/routes/comparison", async (_req, res) => {
   const baseline = await getBaseline();
   if (!baseline) return res.status(400).json({ error: "No baseline set" });
 
-  const all = (await getAllRoutes()).filter(r => r.id !== baseline.id);
-  const comparison = all.map(r => {
+  const all = (await getAllRoutes()).filter((r: Route) => r.id !== baseline.id);
+  const comparison = all.map((r: Route) => {
     const percentDiff = ((r.ghgIntensity / baseline.ghgIntensity) - 1) * 100;
     const compliant = r.ghgIntensity <= TARGET_INTENSITY;
     return {
