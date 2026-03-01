@@ -1,18 +1,6 @@
 import { Route } from "../../core/domain/route";
 
-// If DATABASE_URL is provided, prefer Postgres adapter
-if (process.env.DATABASE_URL) {
-  try {
-    // dynamic import to avoid requiring pg when not needed
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    module.exports = require('./postgresRoutes');
-  } catch (err) {
-    // fall back to in-memory if import fails
-    // eslint-disable-next-line no-console
-    console.warn('Failed to load postgresRoutes adapter, using in-memory routes', err?.message || err);
-  }
-}
-
+// In-memory adapter (async API for compatibility)
 const seed: Route[] = [
   { id: "1", routeId: "R001", vesselType: "Container", fuelType: "HFO", year: 2024, ghgIntensity: 91.0, fuelConsumption: 5000, distance: 12000, totalEmissions: 4500, isBaseline: true },
   { id: "2", routeId: "R002", vesselType: "BulkCarrier", fuelType: "LNG", year: 2024, ghgIntensity: 88.0, fuelConsumption: 4800, distance: 11500, totalEmissions: 4200 },
@@ -23,16 +11,16 @@ const seed: Route[] = [
 
 const routes = seed.map(r => ({ ...r }));
 
-export function getAllRoutes(): Route[] {
+export async function getAllRoutes(): Promise<Route[]> {
   return routes;
 }
 
-export function findById(id: string): Route | undefined {
+export async function findById(id: string): Promise<Route | undefined> {
   return routes.find(r => r.id === id || r.routeId === id);
 }
 
-export function setBaseline(id: string): Route | null {
-  const found = findById(id);
+export async function setBaseline(id: string): Promise<Route | null> {
+  const found = await findById(id);
   if (!found) return null;
   // unset previous baseline
   routes.forEach(r => (r.isBaseline = false));
@@ -40,6 +28,6 @@ export function setBaseline(id: string): Route | null {
   return found;
 }
 
-export function getBaseline(year?: number): Route | undefined {
+export async function getBaseline(year?: number): Promise<Route | undefined> {
   return routes.find(r => r.isBaseline && (year ? r.year === year : true));
 }

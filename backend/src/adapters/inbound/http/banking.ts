@@ -1,5 +1,5 @@
 import express from "express";
-import { findById } from "../../outbound/inMemoryRoutes";
+import { findById } from "../../outbound/routesAdapter";
 import { computeCB } from "../../../core/application/computeCB";
 import { getBankRecords, addBankEntry, getAvailableBank } from "../../outbound/inMemoryBank";
 
@@ -14,14 +14,14 @@ router.get("/banking/records", (req, res) => {
 });
 
 // POST /banking/bank { shipId, year, amount }
-router.post("/banking/bank", (req, res) => {
+router.post("/banking/bank", async (req, res) => {
   const body = req.body || {};
   const shipId = String(body.shipId || body.routeId || "");
   const year = body.year ? Number(body.year) : undefined;
   const amount = body.amount ? Number(body.amount) : 0;
   if (!shipId || !amount) return res.status(400).json({ error: "shipId and positive amount required" });
 
-  const route = findById(shipId);
+  const route = await findById(shipId);
   if (!route) return res.status(404).json({ error: "route not found" });
 
   const cb = computeCB(route);
@@ -33,14 +33,14 @@ router.post("/banking/bank", (req, res) => {
 });
 
 // POST /banking/apply { shipId, year, amount }
-router.post("/banking/apply", (req, res) => {
+router.post("/banking/apply", async (req, res) => {
   const body = req.body || {};
   const shipId = String(body.shipId || body.routeId || "");
   const year = body.year ? Number(body.year) : undefined;
   const amount = body.amount ? Number(body.amount) : 0;
   if (!shipId || !amount) return res.status(400).json({ error: "shipId and positive amount required" });
 
-  const route = findById(shipId);
+  const route = await findById(shipId);
   if (!route) return res.status(404).json({ error: "route not found" });
 
   const cb = computeCB(route);

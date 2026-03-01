@@ -1,17 +1,17 @@
 import express from "express";
-import { findById } from "../../outbound/inMemoryRoutes";
+import { findById } from "../../outbound/routesAdapter";
 import { computeCB } from "../../../core/application/computeCB";
 import { getAvailableBank } from "../../outbound/inMemoryBank";
 
 const router = express.Router();
 
 // GET /compliance/cb?shipId=R001&year=2024
-router.get("/compliance/cb", (req, res) => {
+router.get("/compliance/cb", async (req, res) => {
   const shipId = String(req.query.shipId || req.query.routeId || "");
   const year = req.query.year ? Number(req.query.year) : undefined;
   if (!shipId) return res.status(400).json({ error: "shipId (or routeId) required" });
 
-  const route = findById(shipId);
+  const route = await findById(shipId);
   if (!route) return res.status(404).json({ error: "route not found" });
 
   const cb = computeCB(route);
@@ -20,12 +20,12 @@ router.get("/compliance/cb", (req, res) => {
 });
 
 // GET /compliance/adjusted-cb?shipId=R001&year=2024
-router.get("/compliance/adjusted-cb", (req, res) => {
+router.get("/compliance/adjusted-cb", async (req, res) => {
   const shipId = String(req.query.shipId || req.query.routeId || "");
   const year = req.query.year ? Number(req.query.year) : undefined;
   if (!shipId) return res.status(400).json({ error: "shipId (or routeId) required" });
 
-  const route = findById(shipId);
+  const route = await findById(shipId);
   if (!route) return res.status(404).json({ error: "route not found" });
 
   const cb_before = computeCB(route);
