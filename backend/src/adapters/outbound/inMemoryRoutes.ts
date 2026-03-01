@@ -1,5 +1,18 @@
 import { Route } from "../../core/domain/route";
 
+// If DATABASE_URL is provided, prefer Postgres adapter
+if (process.env.DATABASE_URL) {
+  try {
+    // dynamic import to avoid requiring pg when not needed
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    module.exports = require('./postgresRoutes');
+  } catch (err) {
+    // fall back to in-memory if import fails
+    // eslint-disable-next-line no-console
+    console.warn('Failed to load postgresRoutes adapter, using in-memory routes', err?.message || err);
+  }
+}
+
 const seed: Route[] = [
   { id: "1", routeId: "R001", vesselType: "Container", fuelType: "HFO", year: 2024, ghgIntensity: 91.0, fuelConsumption: 5000, distance: 12000, totalEmissions: 4500, isBaseline: true },
   { id: "2", routeId: "R002", vesselType: "BulkCarrier", fuelType: "LNG", year: 2024, ghgIntensity: 88.0, fuelConsumption: 4800, distance: 11500, totalEmissions: 4200 },

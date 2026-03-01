@@ -11,8 +11,12 @@ app.use(compliance);
 app.use(banking);
 app.use(pools);
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`FuelEU backend listening on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
+    console.log(`FuelEU backend listening on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
