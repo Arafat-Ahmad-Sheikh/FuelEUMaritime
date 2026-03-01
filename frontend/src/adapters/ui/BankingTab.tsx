@@ -45,23 +45,23 @@ export default function BankingTab() {
   return (
     <div>
       <div className="flex gap-2 mb-4">
-        <input value={shipId} onChange={e => setShipId(e.target.value)} className="border p-1 rounded" />
-        <input value={year} onChange={e => setYear(e.target.value)} className="border p-1 rounded" />
-        <button onClick={fetchCb} className="px-3 py-1 bg-blue-600 text-white rounded">Refresh CB</button>
+        <input value={shipId} onChange={e => setShipId(e.target.value)} className="input input-bordered input-sm" />
+        <input value={year} onChange={e => setYear(e.target.value)} className="input input-bordered input-sm" />
+        <button onClick={fetchCb} className="btn btn-sm btn-primary">Refresh CB</button>
       </div>
 
       <div className="mb-4">CB snapshot: <strong>{cb ? cb.cb_before.toFixed(0) : '—'}</strong></div>
 
       <div className="flex gap-2 mb-4">
-        <input placeholder="amount" value={amount} onChange={e => setAmount(e.target.value)} className="border p-1 rounded" />
-        <button onClick={bank} className="px-3 py-1 bg-green-600 text-white rounded">Bank</button>
-        <button onClick={apply} className="px-3 py-1 bg-indigo-600 text-white rounded">Apply</button>
+        <input placeholder="amount" value={amount} onChange={e => setAmount(e.target.value)} className="input input-bordered input-sm" />
+        <button onClick={bank} className="btn btn-sm btn-success">Bank</button>
+        <button onClick={apply} className="btn btn-sm btn-accent">Apply</button>
       </div>
 
       <h3 className="font-semibold">Bank Records</h3>
-      <ul>
+      <ul className="menu">
         {records.map(r => (
-          <li key={r.id}>{r.shipId} — {r.amount_gco2eq} ({r.createdAt})</li>
+          <li key={r.id} className="px-2">{r.shipId} — {r.amount_gco2eq} ({r.createdAt})</li>
         ))}
       </ul>
     </div>

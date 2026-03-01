@@ -12,22 +12,17 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('Routes')
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <header className="max-w-6xl mx-auto mb-6">
-        <h1 className="text-2xl font-bold">FuelEU Compliance Dashboard</h1>
-      </header>
+    <div data-theme="dark" className="min-h-screen bg-base-200 p-6">
+      <div className="max-w-6xl mx-auto mb-6">
+        <h1 className="text-3xl font-bold">FuelEU Compliance Dashboard</h1>
+      </div>
 
-      <div className="max-w-6xl mx-auto bg-white shadow rounded p-4">
-        <nav className="flex gap-2 mb-4">
+      <div className="max-w-6xl mx-auto card bg-base-100 shadow-lg p-4">
+        <div className="tabs tabs-boxed mb-4">
           {tabs.map(t => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-3 py-1 rounded ${t === tab ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
-              {t}
-            </button>
+            <a key={t} onClick={() => setTab(t)} className={`tab ${t === tab ? 'tab-active' : ''}`}>{t}</a>
           ))}
-        </nav>
+        </div>
 
         <main>
           {tab === 'Routes' && <RoutesTab />}
