@@ -1,7 +1,7 @@
 import express from "express";
 import { getAllRoutes, setBaseline, getBaseline } from "../../outbound/routesAdapter";
 import { Route } from "../../../core/domain/route";
-import { computeCB, TARGET_INTENSITY } from "../../../core/application/computeCB";
+import { TARGET_INTENSITY } from "../../../core/application/computeCB";
 
 const router = express.Router();
 

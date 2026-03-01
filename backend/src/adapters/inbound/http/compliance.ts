@@ -8,7 +8,6 @@ const router = express.Router();
 // GET /compliance/cb?shipId=R001&year=2024
 router.get("/compliance/cb", async (req, res) => {
   const shipId = String(req.query.shipId || req.query.routeId || "");
-  const year = req.query.year ? Number(req.query.year) : undefined;
   if (!shipId) return res.status(400).json({ error: "shipId (or routeId) required" });
 
   const route = await findById(shipId);

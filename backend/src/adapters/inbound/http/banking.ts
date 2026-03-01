@@ -17,7 +17,6 @@ router.get("/banking/records", (req, res) => {
 router.post("/banking/bank", async (req, res) => {
   const body = req.body || {};
   const shipId = String(body.shipId || body.routeId || "");
-  const year = body.year ? Number(body.year) : undefined;
   const amount = body.amount ? Number(body.amount) : 0;
   if (!shipId || !amount) return res.status(400).json({ error: "shipId and positive amount required" });
 
